@@ -221,12 +221,25 @@ class Stdin {
   foreign static isRaw=(value)
   foreign static isTerminal
 
+  static init_() {
+    __emptyBuffer = ""
+  }
+
   static readByte() {
     return read_ {
       // Peel off the first byte.
       var byte = __buffered.bytes[0]
       __buffered = __buffered[1..-1]
       return byte
+    }
+  }
+
+  static readBytes() {
+    return read_ {
+      // Return all the available bytes.
+      var bytes = __buffered.bytes
+      __buffered = __emptyBuffer
+      return bytes
     }
   }
 
@@ -299,6 +312,7 @@ class Stdin {
   foreign static readStart_()
   foreign static readStop_()
 }
+Stdin.init_()
 
 class Stdout {
   foreign static flush()
